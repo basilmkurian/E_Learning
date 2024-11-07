@@ -1,0 +1,66 @@
+<h2>Admin Dashboard</h2>
+
+<h3>Users</h3>
+<ul>
+    {% for user in users %}
+    <li>
+        {{ user.user.username }} - {{ user.role }}
+        <form method="post" action="{% url 'dashboard' %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user.user.id }}">
+            <button type="submit" name="delete_user">Delete User</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3>Courses</h3>
+<ul>
+    {% for course in courses %}
+    <li>
+        {{ course.title }}
+        {% if course.instructor %}
+        - Instructor: {{ course.instructor.user.username }}
+        <form method="post" action="{% url 'dashboard' %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="course_id" value="{{ course.id }}">
+            <button type="submit" name="unassign_instructor">Unassign Instructor</button>
+        </form>
+        {% else %}
+        - No Instructor Assigned
+        {% endif %}
+        <form method="post" action="{% url 'dashboard' %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="course_id" value="{{ course.id }}">
+            <button type="submit" name="delete_course">Delete Course</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3>Add New User</h3>
+<form method="post" action="{% url 'dashboard' %}">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit" name="add_user">Add User</button>
+</form>
+
+<h3>Add New Course</h3>
+<form method="post" action="{% url 'dashboard' %}">
+    {% csrf_token %}
+    {{ course_form.as_p }}
+    <button type="submit" name="add_course">Add Course</button>
+</form>
+
+<h3>Assign Instructor to Course</h3>
+<form method="post" action="{% url 'dashboard' %}">
+    {% csrf_token %}
+    {{ assign_instructor_form.as_p }}
+    <button type="submit" name="assign_instructor">Assign Instructor</button>
+</form>
+
+
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>

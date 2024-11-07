@@ -1,0 +1,43 @@
+<h2>Student Dashboard</h2>
+<h2>Welcome, {{ user.first_name }}!</h2>
+<h3>Your Enrolled Courses</h3>
+{% if enrolled_courses %}
+<ul>
+    {% for course in enrolled_courses %}
+    <li>
+        <strong>{{ course.title }}</strong> - {{ course.description }}
+        <a href="{% url 'course_detail' course.id %}">View Details</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You are not enrolled in any courses yet.</p>
+{% endif %}
+<h3>Last Accessed Course</h3>
+{% if last_accessed_course %}
+<p>Your last accessed course: <a href="{% url 'course_detail' last_accessed_course.id %}">{{ last_accessed_course.title }}</a></p>
+{% else %}
+<p>You haven't accessed any course yet.</p>
+{% endif %}
+<h3>Available Courses</h3>
+{% if available_courses %}
+<ul>
+    {% for course in available_courses %}
+    <li>
+        <strong>{{ course.title }}</strong> - {{ course.description }}
+        <form action="{% url 'enroll' course.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Enroll</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No courses available for enrollment.</p>
+{% endif %}
+
+<h3>Logout</h3>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>

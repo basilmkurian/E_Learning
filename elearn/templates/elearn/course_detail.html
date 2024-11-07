@@ -1,0 +1,8 @@
+{% block content %}
+<h2>{{ course.title }}</h2>
+
+<p><strong>Description:</strong> {{ course.description }}</p>
+
+<p><strong>Instructor:</strong> {{ course.instructor.user.first_name }}</p>
+
+{% endblock %}
